@@ -9,39 +9,45 @@ import androidx.recyclerview.widget.RecyclerView
 
 class MainActivity : AppCompatActivity() {
 
-    lateinit var items: List<ItemInfo>
+    var items = ArrayList<ItemInfo>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
 
+        val itemsRV = findViewById<RecyclerView>(R.id.listRV)
+
+        var ItemName = findViewById<EditText>(R.id.nameTextbox) //gets the name entered by user
+        var ItemPrice = findViewById<EditText>(R.id.priceTextbox) //gets the price entered by user
+        var ItemLink = findViewById<EditText>(R.id.linkTextbox) //gets the link entered by user
 
 
+
+        itemsRV.layoutManager = LinearLayoutManager(this)
+        val adapter = ItemAdapter(items)
+        itemsRV.adapter = adapter
 
         //========================Start of Button===================
         findViewById<Button>(R.id.SubmitBTN).setOnClickListener {
-            val itemsRV = findViewById<RecyclerView>(R.id.listRV)
 
-            var ItemName = findViewById<EditText>(R.id.nameTextbox) //gets the name entered by user
-            var ItemPrice = findViewById<EditText>(R.id.priceTextbox) //gets the price entered by user
-            var ItemLink = findViewById<EditText>(R.id.linkTextbox) //gets the link entered by user
 
-            //Log.v("Hello $new", "Not working")
-            ItemFetch.insItems("${ItemName.text.toString()}", "${ItemPrice.text.toString()}","${ItemLink.text.toString()}")
-            items = ItemFetch.getItems() //returns Items in the Fetch class
+            items.add(
+                ItemInfo(
+                    ItemName.text.toString(),
+                    ItemPrice.text.toString(),
+                    ItemLink.text.toString()
+                )
+            )
 
-            val adapter = ItemAdapter(items)
-            itemsRV.adapter = adapter
-            itemsRV.layoutManager = LinearLayoutManager(this)
+            adapter.notifyDataSetChanged()
 
-            ItemName.getText().clear() //clears user input box
-            ItemPrice.getText().clear() //clears user input box
-            ItemLink.getText().clear() //clears user input box
+
+            ItemName.text.clear() //clears user input box
+            ItemPrice.text.clear() //clears user input box
+            ItemLink.text.clear() //clears user input box
 
         } //========================END of Button===================
-
-
 
 
     }
